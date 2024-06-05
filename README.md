@@ -1,3 +1,7 @@
+![Microcontroller](https://img.shields.io/badge/Microcontroller-STM32L476RG-03234B?logo=stmicroelectronics)
+![CPU Architecture](https://img.shields.io/badge/CPU_Architecture-ARM-0091BD?logo=arm)
+![License](https://img.shields.io/badge/license-MIT-yellow)
+
 # STM32L4-RobustRegression-EnergyAnalysis
 
 ## Quick Overview
@@ -14,4 +18,4 @@ The following robust regression estimators will be tested:
 - **Huber Regression**
 - **Siegel Estimator**
 
-The goal of this project is to provide insights into the energy efficiency of these estimators on the STM32L476 platform, which is crucial for optimizing performance in ene
+The goal of this project is to provide insights into the energy efficiency of these estimators on the STM32L476 platform, which is crucial for optimizing performance in energy efficiency of these estimators on the STM32L476 platform, which is crucial for optimizing performance in energy-constrained environments.
