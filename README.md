@@ -19,7 +19,7 @@ The following robust regression estimators will be tested:
 
 Additionally, the **Ordinary Least Squares (OLS) Estimator** will be used as a reference to compare with the robust estimators.
 
-The goal of this project is to provide insights into the energy efficiency of these estimators on the STM32L476 platform, which is crucial for optimizing performance in energy efficiency of these estimators on the STM32L476 platform, which is crucial for optimizing performance in energy-constrained environments.
+The goal of this project is to provide insights into the energy efficiency of these estimators on the STM32L476 platform, which is crucial for optimizing performance in energy-constrained environments.
 
 ### Data Generation and Use
 - Synthetic data will be generated using Python, leveraging the `make_regression` function from the `datasets` module in the `scikit-learn` package. Outliers will be added to the generated data to simulate real-world conditions.
