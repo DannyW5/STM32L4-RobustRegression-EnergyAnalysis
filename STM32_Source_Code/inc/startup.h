@@ -9,7 +9,7 @@ extern "C" {
 
 void Error_Handler(void);
 void SystemClock_Config(void);
-static void GPIO_Init(void);
+void GPIO_Init(void);
 
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC

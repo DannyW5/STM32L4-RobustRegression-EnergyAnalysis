@@ -1,0 +1,6 @@
+#ifndef RANSACESTIMATOR_H
+#define RANSACESTIMATOR_H
+
+
+
+#endif
