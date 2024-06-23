@@ -37,3 +37,6 @@ build*/
 
 # IDE catalogues
 .vscode/
+
+# Python venv
+**/.venv/
