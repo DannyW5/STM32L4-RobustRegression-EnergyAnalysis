@@ -34,3 +34,6 @@
 
 # Build catalogues
 build*/
+
+# IDE catalogues
+.vscode/
