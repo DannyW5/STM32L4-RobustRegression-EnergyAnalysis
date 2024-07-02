@@ -17,7 +17,7 @@ public:
 
     void Init() override;
     void SendData(const std::string& str) override;
-
+    
 private:
     UART_HandleTypeDef uart_;
 };

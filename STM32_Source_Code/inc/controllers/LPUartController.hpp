@@ -10,6 +10,7 @@
 class LPUartController: public IUartController{
 public:
     LPUartController() = default;
+    ~LPUartController() override = default;
 
     void Init() override;
     void SendData(const std::string& str) override;

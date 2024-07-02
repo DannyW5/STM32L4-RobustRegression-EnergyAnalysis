@@ -10,15 +10,17 @@ void LPUartController::Init(){
     gpioTx.Mode = GPIO_MODE_AF_PP;
     gpioTx.Pin = GPIO_PIN_1;
     gpioTx.Pull = GPIO_NOPULL;
-    gpioTx.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOA, &gpioTx);
+    gpioTx.Speed = GPIO_SPEED_FREQ_HIGH;
+    gpioTx.Alternate = GPIO_AF8_LPUART1;
+    HAL_GPIO_Init(GPIOC, &gpioTx);
 
     GPIO_InitTypeDef gpioRx;
-    gpioRx.Mode = GPIO_MODE_INPUT;
+    gpioRx.Mode = GPIO_MODE_AF_PP;
     gpioRx.Pin = GPIO_PIN_0;
     gpioRx.Pull = GPIO_NOPULL;
-    gpioRx.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOA, &gpioRx);
+    gpioRx.Speed = GPIO_SPEED_FREQ_HIGH;
+    gpioRx.Alternate = GPIO_AF8_LPUART1;
+    HAL_GPIO_Init(GPIOC, &gpioRx);
 
     uart_.Instance = LPUART1;
     uart_.Init.BaudRate = 115200;

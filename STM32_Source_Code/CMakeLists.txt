@@ -52,7 +52,7 @@ target_sources(${APP} PRIVATE
 add_subdirectory(src)
 
 target_compile_definitions(${APP} PRIVATE
-    #$<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Debug>:DEBUG>
     ${MCU_MODEL}
     USE_HAL_DRIVER)
 

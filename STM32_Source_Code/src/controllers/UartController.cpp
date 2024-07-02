@@ -10,14 +10,16 @@ void UartController::Init(){
     gpioTx.Mode = GPIO_MODE_AF_PP;
     gpioTx.Pin = GPIO_PIN_2;
     gpioTx.Pull = GPIO_NOPULL;
-    gpioTx.Speed = GPIO_SPEED_FREQ_LOW;
+    gpioTx.Speed = GPIO_SPEED_FREQ_HIGH;
+    gpioTx.Alternate = GPIO_AF7_USART2;
     HAL_GPIO_Init(GPIOA, &gpioTx);
 
     GPIO_InitTypeDef gpioRx;
     gpioRx.Mode = GPIO_MODE_INPUT;
     gpioRx.Pin = GPIO_PIN_3;
     gpioRx.Pull = GPIO_NOPULL;
-    gpioRx.Speed = GPIO_SPEED_FREQ_LOW;
+    gpioRx.Speed = GPIO_SPEED_FREQ_HIGH;
+    gpioRx.Alternate = GPIO_AF7_USART2;
     HAL_GPIO_Init(GPIOA, &gpioRx);
 
     uart_.Instance = USART2;
@@ -37,5 +39,5 @@ void UartController::Init(){
 }
 
 void UartController::SendData(const std::string& str){
-   HAL_UART_Transmit(&uart_, reinterpret_cast<const uint8_t*>(str.c_str()), str.size(), HAL_MAX_DELAY);
+    HAL_UART_Transmit(&uart_, reinterpret_cast<const uint8_t*>(str.c_str()), str.size(), HAL_MAX_DELAY);
 }
