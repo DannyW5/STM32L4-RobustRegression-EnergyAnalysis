@@ -7,7 +7,7 @@
 #include "Point.hpp"
 
 template <typename T, std::size_t N>
-std::pair<T, T> CalculateTheilSenEstimator(const std::array<Point<T>, N>& points){
+std::pair<double, double> CalculateTheilSenEstimator(const std::array<Point<T>, N>& points){
     constexpr std::size_t num_slopes = N * (N - 1) / 2;
     std::array<double, num_slopes> slopes;
     size_t index = 0;

@@ -15,7 +15,8 @@ set(CPU_PARAMETERS
     -mcpu=cortex-m4
     -mthumb
     -mfpu=fpv4-sp-d16
-    -mfloat-abi=hard)
+    -mfloat-abi=hard
+    )
 
 set(STARTUP_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/startup_stm32l476rgtx.s)
 set(MCU_LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/inc/platform/STM32L476RGTX_FLASH.ld)
@@ -93,7 +94,8 @@ target_link_options(${APP} PRIVATE
     -lm
     -lstdc++
     -Wl,--end-group
-    -Wl,--print-memory-usage)
+    -Wl,--print-memory-usage
+    -u _printf_float)
 
 add_custom_command(TARGET ${APP} POST_BUILD
     COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${APP}>)

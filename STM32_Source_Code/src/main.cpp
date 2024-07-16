@@ -43,22 +43,22 @@ int main(void)
     timer.StartMeasurement();
     auto slope_intercept_TheilSen = CalculateTheilSenEstimator(points_int);
     auto time_TheilSen = timer.StopMeasurement();
-    logger.LogResults("Theil-Sen", std::to_string(slope_intercept_TheilSen.first), std::to_string(slope_intercept_TheilSen.first), time_TheilSen);
+    logger.LogResults("Theil-Sen", std::to_string(slope_intercept_TheilSen.first), std::to_string(slope_intercept_TheilSen.second), time_TheilSen);
 
-    // timer.StartMeasurement();
-    // auto slope_intercept_RANSAC = CalculateRansacEstimator(points_int, 10, 1);
-    // auto time_RANSAC = timer.StopMeasurement();
-    // logger.LogResults("RANSAC", std::to_string(slope_intercept_RANSAC.first), std::to_string(slope_intercept_RANSAC.first), time_RANSAC);
+    timer.StartMeasurement();
+    auto slope_intercept_RANSAC = CalculateRansacEstimator(points_int, 10, 1);
+    auto time_RANSAC = timer.StopMeasurement();
+    logger.LogResults("RANSAC", std::to_string(slope_intercept_RANSAC.first), std::to_string(slope_intercept_RANSAC.second), time_RANSAC);
 
-    // timer.StartMeasurement();
-    // auto slope_intercept_Huber = CalculateHuberEstimator(points_int, 1);
-    // auto time_Huber = timer.StopMeasurement();
-    // logger.LogResults("Huber", std::to_string(slope_intercept_Huber.first), std::to_string(slope_intercept_Huber.first), time_Huber);
+    timer.StartMeasurement();
+    auto slope_intercept_Huber = CalculateHuberEstimator(points_int, 1);
+    auto time_Huber = timer.StopMeasurement();
+    logger.LogResults("Huber", std::to_string(slope_intercept_Huber.first), std::to_string(slope_intercept_Huber.second), time_Huber);
 
     timer.StartMeasurement();
     auto slope_intercept_OLS = CalculateOLSEstimator(points_int);
     auto time_OLS = timer.StopMeasurement();
-    logger.LogResults("OLS", std::to_string(slope_intercept_OLS.first), std::to_string(slope_intercept_OLS.first), time_OLS);
+    logger.LogResults("OLS", std::to_string(slope_intercept_OLS.first), std::to_string(slope_intercept_OLS.second), 1);
 
     HAL_Delay(1000); 
   }
