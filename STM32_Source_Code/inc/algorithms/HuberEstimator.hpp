@@ -6,16 +6,16 @@
 #include "Point.hpp"
 
 template <typename T, std::size_t N>
-std::pair<double, double> CalculateHuberEstimator(const std::array<Point<T>, N>& points, double delta) {
-    double slope = 0.0, intercept = 0.0;
+std::pair<float, float> CalculateHuberEstimator(const std::array<Point<T>, N>& points, float delta) {
+    float slope = 0.0f, intercept = 0.0f;
 
     for (size_t iter = 0; iter < 100; ++iter) {
-        double sumX = 0.0, sumY = 0.0, sumXY = 0.0, sumX2 = 0.0, sumW = 0.0;
+        float sumX = 0.0, sumY = 0.0, sumXY = 0.0, sumX2 = 0.0, sumW = 0.0;
 
         for (const auto& point : points) {
-            double pred = slope * point.x + intercept;
-            double residual = point.y - pred;
-            double weight = (std::abs(residual) <= delta) ? 1.0 : delta / std::abs(residual);
+            float pred = slope * point.x + intercept;
+            float residual = point.y - pred;
+            float weight = (std::abs(residual) <= delta) ? 1.0f : delta / std::abs(residual);
 
             sumW += weight;
             sumX += weight * point.x;

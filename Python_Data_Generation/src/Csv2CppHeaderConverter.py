@@ -10,7 +10,7 @@ class Csv2CppHeaderConverter:
     #include <array>
     #include "algorithms/Point.hpp"
 
-    const std::array<Point<double>, {size}> points = {{{{
+    const std::array<Point<float>, {size}> points = {{{{
     {points}
     }}}};
 
@@ -20,7 +20,7 @@ class Csv2CppHeaderConverter:
     @staticmethod
     def convert_data(filepath: str):
         df = pd.read_csv(filepath)
-        points= ",\n".join([f"    {{{row['X']}, {row['Y']}}}" for _, row in df.iterrows()])
+        points= ",\n".join([f"    {{{row['X']}f, {row['Y']}f}}" for _, row in df.iterrows()])
         header_guard = f"{(filepath.split('/')[-1])[:-4].upper()}_HPP"
         hpp_content = Csv2CppHeaderConverter.HPP_TEMPLATE.format(size=len(df), points=points, header_guard=header_guard)
 

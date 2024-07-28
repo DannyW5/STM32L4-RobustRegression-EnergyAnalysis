@@ -9,17 +9,17 @@
 #include "Point.hpp"
 
 template <typename T>
-double distanceFromLine(const Point<T>& point, double slope, double intercept) {
+float distanceFromLine(const Point<T>& point, float slope, float intercept) {
     return std::abs(slope * point.x - point.y + intercept) / std::sqrt(slope * slope + 1);
 }
 
 template <typename T, std::size_t N>
-std::pair<double, double> CalculateRansacEstimator(const std::array<Point<T>, N>& points, std::size_t numIterations, double threshold) {
+std::pair<float, float> CalculateRansacEstimator(const std::array<Point<T>, N>& points, std::size_t numIterations, float threshold) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, N - 1);
 
-    double bestSlope = 0.0, bestIntercept = 0.0;
+    float bestSlope = 0.0, bestIntercept = 0.0;
     std::size_t bestInliers = 0;
 
     for (std::size_t i = 0; i < numIterations; ++i) {
@@ -34,8 +34,8 @@ std::pair<double, double> CalculateRansacEstimator(const std::array<Point<T>, N>
 
         if (p1.x == p2.x) continue;
 
-        double slope = static_cast<double>(p2.y - p1.y) / (p2.x - p1.x);
-        double intercept = p1.y - slope * p1.x;
+        float slope = static_cast<float>(p2.y - p1.y) / (p2.x - p1.x);
+        float intercept = p1.y - slope * p1.x;
 
         std::size_t inliers = std::count_if(points.begin(), points.end(), [&](const Point<T>& point) {
             return distanceFromLine(point, slope, intercept) < threshold;

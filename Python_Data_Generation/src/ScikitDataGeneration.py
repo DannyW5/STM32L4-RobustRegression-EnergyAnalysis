@@ -24,7 +24,7 @@ class RegressionDataGenerator:
 
         outliers = np.random.choice(number, number_outliers, replace=False)
 
-        return np.array(x), np.array(y)
+        return np.array(x).astype(np.float32), np.array(y).astype(np.float32)
     
 
     @staticmethod

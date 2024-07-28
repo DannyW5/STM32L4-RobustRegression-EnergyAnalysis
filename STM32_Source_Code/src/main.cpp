@@ -29,29 +29,32 @@ int main(void)
   static Timer100us timer = Timer100us();
   timer.Init();
 
+  std::array<Point<float>, 210> points_cut;
+  std::copy(points.begin() + 0, points.begin() + 210, points_cut.begin());
+
   while (1)
   {
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 
-    // timer.StartMeasurement();
-    // auto slope_intercept_TheilSen = CalculateTheilSenEstimator(points_cut);
-    // auto time_TheilSen = timer.StopMeasurement();
-    // logger.LogResults("Theil-Sen", std::to_string(slope_intercept_TheilSen.first), std::to_string(slope_intercept_TheilSen.second), time_TheilSen);
+    timer.StartMeasurement();
+    auto slope_intercept_TheilSen = CalculateTheilSenEstimator(points_cut);
+    auto time_TheilSen = timer.StopMeasurement();
+    logger.LogResults("Theil-Sen", std::to_string(slope_intercept_TheilSen.first), std::to_string(slope_intercept_TheilSen.second), time_TheilSen);
 
     timer.StartMeasurement();
-    auto slope_intercept_RANSAC = CalculateRansacEstimator(points, 100, 0.1);
+    auto slope_intercept_RANSAC = CalculateRansacEstimator(points, 100, 0.1f);
     auto time_RANSAC = timer.StopMeasurement();
     logger.LogResults("RANSAC", std::to_string(slope_intercept_RANSAC.first), std::to_string(slope_intercept_RANSAC.second), time_RANSAC);
 
     timer.StartMeasurement();
-    auto slope_intercept_Huber = CalculateHuberEstimator(points, 1.35);
+    auto slope_intercept_Huber = CalculateHuberEstimator(points, 1.35f);
     auto time_Huber = timer.StopMeasurement();
     logger.LogResults("Huber", std::to_string(slope_intercept_Huber.first), std::to_string(slope_intercept_Huber.second), time_Huber);
 
     timer.StartMeasurement();
     auto slope_intercept_OLS = CalculateOLSEstimator(points);
     auto time_OLS = timer.StopMeasurement();
-    logger.LogResults("OLS", std::to_string(slope_intercept_OLS.first), std::to_string(slope_intercept_OLS.second), 1);
+    logger.LogResults("OLS", std::to_string(slope_intercept_OLS.first), std::to_string(slope_intercept_OLS.second), time_OLS);
 
     HAL_Delay(1000); 
   }
