@@ -7,7 +7,7 @@
 
 class AdcPort{
 public:
-    AdcPort(ADC_TypeDef* adc, uint8_t channel): adc_(adc), channel_(channel){};
+    AdcPort(ADC_TypeDef* adc, uint32_t channel): adc_(adc), channel_(channel){};
     ~AdcPort() = default;
 
     void Init();
@@ -16,7 +16,7 @@ public:
 private:
     ADC_HandleTypeDef hadc_;
     ADC_TypeDef* adc_;
-    uint8_t channel_;
+    uint32_t channel_;
 };
 
 

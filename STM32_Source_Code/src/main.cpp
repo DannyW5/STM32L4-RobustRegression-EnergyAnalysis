@@ -5,6 +5,9 @@
 #include "controllers/LPUartController.hpp"
 #include "controllers/EstimatorResultsLogger.hpp"
 #include "controllers/Timer100us.hpp"
+#include "controllers/DacPort.hpp"
+#include "controllers/AdcPort.hpp"
+
 
 #include "algorithms/TheilSenEstimator.hpp"
 #include "algorithms/RansacEstimator.hpp"
@@ -22,6 +25,11 @@ int main(void)
 
   uartController.Init();
   // lpUartController.Init();
+
+  static DacPort measCircuitVoltage = DacPort(DAC1, DAC1_CHANNEL_1);
+  measCircuitVoltage.Init();
+  static AdcPort measResistorVoltage = AdcPort(ADC1, ADC_CHANNEL_1);
+  measResistorVoltage.Init();
 
   static EstimatorResultsLogger logger = EstimatorResultsLogger(std::make_unique<UartController>(uartController));
   // static EstimatorResultsLogger logger = EstimatorResultsLogger(std::make_unique<LPUartController>(lpUartController));
