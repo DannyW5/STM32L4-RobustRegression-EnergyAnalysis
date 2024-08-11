@@ -35,6 +35,7 @@ int main(void)
   while (1)
   {
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+    
 
     timer.StartMeasurement();
     auto slope_intercept_TheilSen = CalculateTheilSenEstimator(points_cut);

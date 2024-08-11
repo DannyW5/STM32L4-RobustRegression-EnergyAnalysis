@@ -3,4 +3,6 @@ target_sources(${APP} PRIVATE
                 LPUartController.cpp
                 EstimatorResultsLogger.cpp
                 Timer100us.cpp
+                AdcPort.cpp
+                DacPort.cpp
                 )
