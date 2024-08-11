@@ -3,6 +3,7 @@
 
 void AdcPort::Init()
 {
+    __HAL_RCC_ADC_CLK_ENABLE();
     ADC_MultiModeTypeDef multimode;
     ADC_ChannelConfTypeDef sConfig;
 
@@ -27,11 +28,7 @@ void AdcPort::Init()
     hadc_.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
     hadc_.Init.DMAContinuousRequests = DISABLE;
     hadc_.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-    hadc_.Init.OversamplingMode = ENABLE;
-    hadc_.Init.Oversampling.Ratio = ADC_OVERSAMPLING_RATIO_4;
-    hadc_.Init.Oversampling.RightBitShift = ADC_RIGHTBITSHIFT_NONE;
-    hadc_.Init.Oversampling.TriggeredMode = ADC_TRIGGEREDMODE_SINGLE_TRIGGER;
-    hadc_.Init.Oversampling.OversamplingStopReset = ADC_REGOVERSAMPLING_CONTINUED_MODE;
+    hadc_.Init.OversamplingMode = DISABLE;
     if (HAL_ADC_Init(&hadc_) != HAL_OK)
     {
         Error_Handler();
@@ -43,9 +40,9 @@ void AdcPort::Init()
         Error_Handler();
     }
 
-    if ((channel_ != ADC_CHANNEL_0) | (channel_ != ADC_CHANNEL_1) |
-        (channel_ != ADC_CHANNEL_2) | (channel_ != ADC_CHANNEL_3) |
-        (channel_ != ADC_CHANNEL_4) | (channel_ != ADC_CHANNEL_5))
+    if ((channel_ != ADC_CHANNEL_0) && (channel_ != ADC_CHANNEL_1) &&
+        (channel_ != ADC_CHANNEL_2) && (channel_ != ADC_CHANNEL_3) &&
+        (channel_ != ADC_CHANNEL_4) && (channel_ != ADC_CHANNEL_5))
     {
         Error_Handler();
     }

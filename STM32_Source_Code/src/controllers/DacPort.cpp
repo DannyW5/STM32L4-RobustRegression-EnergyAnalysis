@@ -3,7 +3,6 @@
 
 void DacPort::Init()
 {
-
     DAC_ChannelConfTypeDef sConfig;
 
     if (dac_ == DAC1)
@@ -15,7 +14,7 @@ void DacPort::Init()
         Error_Handler();
     }
 
-    if ((channel_ != DAC1_CHANNEL_1) | (channel_ != DAC1_CHANNEL_2))
+    if ((channel_ != DAC1_CHANNEL_1) && (channel_ != DAC1_CHANNEL_2))
     {
         Error_Handler();
     }
@@ -45,5 +44,7 @@ MilliVolt DacPort::GetVoltage()
 
 void DacPort::SetVoltage(MilliVolt voltage)
 {
-    HAL_DAC_SetValue(&hdac_, channel_, DAC_ALIGN_12B_R, (voltage / VDD_VALUE)*4096);
+    if(voltage >= 0 && voltage <= VDD_VALUE){
+        HAL_DAC_SetValue(&hdac_, channel_, DAC_ALIGN_12B_R, (voltage / VDD_VALUE)*4096);
+    }
 }
