@@ -2,8 +2,24 @@
 #include "startup.h"
 
 void AdcPort::Init()
-{
+{   
     __HAL_RCC_ADC_CLK_ENABLE();
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+
+    RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;
+    RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+    RCC_PeriphClkInit.AdcClockSelection    = RCC_ADCCLKSOURCE_SYSCLK;
+    if(HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit) != HAL_OK){
+        Error_Handler();
+    }
+
+    GPIO_InitTypeDef PinADC;
+    PinADC.Mode = GPIO_MODE_ANALOG_ADC_CONTROL;
+    PinADC.Pin = GPIO_PIN_0;
+    PinADC.Pull = GPIO_NOPULL;
+    PinADC.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOC, &PinADC);
+
     ADC_MultiModeTypeDef multimode;
     ADC_ChannelConfTypeDef sConfig;
 
@@ -21,19 +37,19 @@ void AdcPort::Init()
     hadc_.Init.ScanConvMode = ADC_SCAN_DISABLE;
     hadc_.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
     hadc_.Init.LowPowerAutoWait = DISABLE;
-    hadc_.Init.ContinuousConvMode = DISABLE;
+    hadc_.Init.ContinuousConvMode = ENABLE;
     hadc_.Init.NbrOfConversion = 1;
     hadc_.Init.DiscontinuousConvMode = DISABLE;
     hadc_.Init.ExternalTrigConv = ADC_SOFTWARE_START;
     hadc_.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
     hadc_.Init.DMAContinuousRequests = DISABLE;
-    hadc_.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+    hadc_.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
     hadc_.Init.OversamplingMode = DISABLE;
     if (HAL_ADC_Init(&hadc_) != HAL_OK)
     {
         Error_Handler();
     }
-
+  
     multimode.Mode = ADC_MODE_INDEPENDENT;
     if (HAL_ADCEx_MultiModeConfigChannel(&hadc_, &multimode) != HAL_OK)
     {
@@ -58,11 +74,25 @@ void AdcPort::Init()
         Error_Handler();
     }
 
-    HAL_ADCEx_Calibration_Start(&hadc_, sConfig.SingleDiff);
+    if (HAL_ADCEx_Calibration_Start(&hadc_, sConfig.SingleDiff) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    // HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
     HAL_ADC_Start(&hadc_);
 }
 
 MilliVolt AdcPort::GetVoltage()
 {
-    return VDD_VALUE * HAL_ADC_GetValue(&hadc_) / 4096;
+    if (HAL_ADC_PollForConversion(&hadc_, HAL_MAX_DELAY) == HAL_OK)
+    {
+        return VDD_VALUE * HAL_ADC_GetValue(&hadc_) / 4096;
+    }
+    else
+    {
+        return 0;
+    }
 }
+

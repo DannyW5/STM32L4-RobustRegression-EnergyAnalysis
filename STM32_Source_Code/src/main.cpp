@@ -40,15 +40,16 @@ int main(void)
   std::array<Point<float>, 210> points_cut;
   std::copy(points.begin() + 0, points.begin() + 210, points_cut.begin());
 
-  measCircuitVoltage.SetVoltage(1200);
-  auto CircuitVoltage = measCircuitVoltage.GetVoltage();
+  // measCircuitVoltage.SetVoltage(1200);
 
-  auto ResistorVoltage = measResistorVoltage.GetVoltage();
 
   while (1)
   {
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-    
+
+    // auto ResistorVoltage = measResistorVoltage.GetVoltage();
+    // uartController.SendData(std::to_string(ResistorVoltage) + "\n\r");
+
     timer.StartMeasurement();
     auto slope_intercept_TheilSen = CalculateTheilSenEstimator(points_cut);
     auto time_TheilSen = timer.StopMeasurement();

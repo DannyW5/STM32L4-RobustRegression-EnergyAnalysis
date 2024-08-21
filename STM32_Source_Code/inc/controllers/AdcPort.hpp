@@ -3,6 +3,7 @@
 
 #include "Types.hpp"
 #include "stm32l4xx_hal.h"
+#include "stm32l4xx_hal_rcc_ex.h"
 #include "stm32l4xx_hal_adc.h"
 
 class AdcPort{

@@ -2,7 +2,17 @@
 #include "startup.h"
 
 void DacPort::Init()
-{
+{   
+    __HAL_RCC_DAC1_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+
+    GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitStruct.Pin = GPIO_PIN_4;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    
     DAC_ChannelConfTypeDef sConfig;
 
     if (dac_ == DAC1)
@@ -45,6 +55,6 @@ MilliVolt DacPort::GetVoltage()
 void DacPort::SetVoltage(MilliVolt voltage)
 {
     if(voltage >= 0 && voltage <= VDD_VALUE){
-        HAL_DAC_SetValue(&hdac_, channel_, DAC_ALIGN_12B_R, (voltage / VDD_VALUE)*4096);
+        HAL_DAC_SetValue(&hdac_, channel_, DAC_ALIGN_12B_R, (static_cast<float>(voltage) / VDD_VALUE)*4096);
     }
 }
