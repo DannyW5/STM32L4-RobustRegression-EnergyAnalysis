@@ -15,8 +15,7 @@ float distanceFromLine(const Point<T>& point, float slope, float intercept) {
 
 template <typename T, std::size_t N>
 std::pair<float, float> CalculateRansacEstimator(const std::array<Point<T>, N>& points, std::size_t numIterations, float threshold) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(HAL_GetTick());
     std::uniform_int_distribution<> dis(0, N - 1);
 
     float bestSlope = 0.0, bestIntercept = 0.0;
