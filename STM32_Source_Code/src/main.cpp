@@ -56,7 +56,7 @@ int main(void)
     logger.LogResults("Theil-Sen", std::to_string(slope_intercept_TheilSen.first), std::to_string(slope_intercept_TheilSen.second), time_TheilSen);
 
     timer.StartMeasurement();
-    auto slope_intercept_RTheilSen = CalculateRandomizedTheilSenEstimator(points, 200);
+    auto slope_intercept_RTheilSen = CalculateRandomizedTheilSenEstimator<float, 1000, 200>(points);
     auto time_RTheilSen = timer.StopMeasurement();
     logger.LogResults("Randomized Theil-Sen", std::to_string(slope_intercept_RTheilSen.first), std::to_string(slope_intercept_RTheilSen.second), time_RTheilSen);
 
