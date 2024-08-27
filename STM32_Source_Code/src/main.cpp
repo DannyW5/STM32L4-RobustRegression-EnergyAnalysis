@@ -61,6 +61,26 @@ int main(void)
     logger.LogResults("Randomized Theil-Sen", std::to_string(slope_intercept_RTheilSen.first), std::to_string(slope_intercept_RTheilSen.second), time_RTheilSen);
 
     timer.StartMeasurement();
+    auto slope_intercept_RMeanTheilSen = CalculateRandomizedMeanTheilSenEstimator<float, 1000, 100, 200>(points);
+    auto time_RMeanTheilSen = timer.StopMeasurement();
+    logger.LogResults("Randomized Median Theil-Sen", std::to_string(slope_intercept_RMeanTheilSen.first), std::to_string(slope_intercept_RMeanTheilSen.second), time_RMeanTheilSen);
+
+    timer.StartMeasurement();
+    auto slope_intercept_RMedianTheilSen = CalculateRandomizedMedianTheilSenEstimator<float, 1000, 100, 200>(points);
+    auto time_RMedianTheilSen = timer.StopMeasurement();
+    logger.LogResults("Randomized Median Theil-Sen", std::to_string(slope_intercept_RMedianTheilSen.first), std::to_string(slope_intercept_RMedianTheilSen.second), time_RMedianTheilSen);
+
+    timer.StartMeasurement();
+    auto slope_intercept_ExtremeAndCentralPointTheilSen = CalculateExtremeAndCentralPointsTheilSenEstimator<float, 1000, 200>(points);
+    auto time_ExtremeAndCentralPointTheilSen= timer.StopMeasurement();
+    logger.LogResults("Extreme and Central Point Theil-Sen", std::to_string(slope_intercept_ExtremeAndCentralPointTheilSen.first), std::to_string(slope_intercept_ExtremeAndCentralPointTheilSen.second), time_ExtremeAndCentralPointTheilSen);
+
+    timer.StartMeasurement();
+    auto slope_intercept_AWTheilSen = CalculateAdaptiveTheilSenEstimator<float, 1000, 200>(points);
+    auto time_AWTheilSen = timer.StopMeasurement();
+    logger.LogResults("Adaptive Theil-Sen", std::to_string(slope_intercept_AWTheilSen.first), std::to_string(slope_intercept_AWTheilSen.second), time_AWTheilSen);
+
+    timer.StartMeasurement();
     auto slope_intercept_RANSAC = CalculateRansacEstimator(points, 100, 0.1f);
     auto time_RANSAC = timer.StopMeasurement();
     logger.LogResults("RANSAC", std::to_string(slope_intercept_RANSAC.first), std::to_string(slope_intercept_RANSAC.second), time_RANSAC);
