@@ -63,7 +63,7 @@ int main(void)
     timer.StartMeasurement();
     auto slope_intercept_RMeanTheilSen = CalculateRandomizedMeanTheilSenEstimator<float, 1000, 100, 200>(points);
     auto time_RMeanTheilSen = timer.StopMeasurement();
-    logger.LogResults("Randomized Median Theil-Sen", std::to_string(slope_intercept_RMeanTheilSen.first), std::to_string(slope_intercept_RMeanTheilSen.second), time_RMeanTheilSen);
+    logger.LogResults("Randomized Mean Theil-Sen", std::to_string(slope_intercept_RMeanTheilSen.first), std::to_string(slope_intercept_RMeanTheilSen.second), time_RMeanTheilSen);
 
     timer.StartMeasurement();
     auto slope_intercept_RMedianTheilSen = CalculateRandomizedMedianTheilSenEstimator<float, 1000, 100, 200>(points);
@@ -71,12 +71,12 @@ int main(void)
     logger.LogResults("Randomized Median Theil-Sen", std::to_string(slope_intercept_RMedianTheilSen.first), std::to_string(slope_intercept_RMedianTheilSen.second), time_RMedianTheilSen);
 
     timer.StartMeasurement();
-    auto slope_intercept_ExtremeAndCentralPointTheilSen = CalculateExtremeAndCentralPointsTheilSenEstimator<float, 1000, 200>(points);
+    auto slope_intercept_ExtremeAndCentralPointTheilSen = CalculateExtremeAndCentralPointsTheilSenEstimator<float, 1000, 190>(points);
     auto time_ExtremeAndCentralPointTheilSen= timer.StopMeasurement();
     logger.LogResults("Extreme and Central Point Theil-Sen", std::to_string(slope_intercept_ExtremeAndCentralPointTheilSen.first), std::to_string(slope_intercept_ExtremeAndCentralPointTheilSen.second), time_ExtremeAndCentralPointTheilSen);
 
     timer.StartMeasurement();
-    auto slope_intercept_AWTheilSen = CalculateAdaptiveTheilSenEstimator<float, 1000, 200>(points);
+    auto slope_intercept_AWTheilSen = CalculateAdaptiveTheilSenEstimator<float, 1000, 180>(points);
     auto time_AWTheilSen = timer.StopMeasurement();
     logger.LogResults("Adaptive Theil-Sen", std::to_string(slope_intercept_AWTheilSen.first), std::to_string(slope_intercept_AWTheilSen.second), time_AWTheilSen);
 

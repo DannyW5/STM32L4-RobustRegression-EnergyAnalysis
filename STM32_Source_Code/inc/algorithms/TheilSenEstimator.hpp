@@ -11,11 +11,15 @@
 
 #include "Point.hpp"
 
-static constexpr uint8_t POINTS_MAX_SIZE = 200;
+static constexpr uint8_t POINTS_MAX_SIZE = 210;
 
 template <typename T, std::size_t N>
 std::pair<float, float> CalculateTheilSenEstimator(const std::array<Point<T>, N> &points)
 {
+    if (N > POINTS_MAX_SIZE) {
+        while(true); // Assertion
+    }
+
     constexpr std::size_t num_slopes = N * (N - 1) / 2;
     std::array<float, num_slopes> slopes;
     size_t index = 0;
@@ -198,8 +202,8 @@ std::pair<float, float> CalculateAdaptiveTheilSenEstimator(const std::array<Poin
     std::array<Point<T>, N> sorted_points = points;
     std::sort(sorted_points.begin(), sorted_points.end());
 
-    std::array<float, N> x_values;
-    std::array<float, N> y_values;
+    std::array<T, N> x_values;
+    std::array<T, N> y_values;
     for (std::size_t i = 0; i < N; ++i) {
         x_values[i] = sorted_points[i].x;
         y_values[i] = sorted_points[i].y;
@@ -209,27 +213,17 @@ std::pair<float, float> CalculateAdaptiveTheilSenEstimator(const std::array<Poin
     double stddev_x = calculateStandardDeviation(x_values, mean_x);
     double stddev_y = calculateStandardDeviation(y_values, mean_y);
 
-    std::array<Point<T>, N> filtered_data;
-    std::size_t filtered_count = 0;
-    double threshold_x = mean_x + 2 * stddev_x;
-    double threshold_y = mean_y + 2 * stddev_y;
-    for (const auto& point : sorted_points) {
-        if (std::fabs(point.x - mean_x) <= threshold_x &&
-            std::fabs(point.y - mean_y) <= threshold_y) {
-            filtered_data[filtered_count++] = point;
-        }
-    }
-
     std::random_device rd;
     std::mt19937 gen(HAL_GetTick());
-    std::uniform_int_distribution<std::size_t> dist(0, filtered_count - 1);
+    std::uniform_int_distribution<std::size_t> dist(0, num_points - 1);
+
     std::array<Point<T>, num_points> data_to_use;
     for (std::size_t i = 0; i < num_points; ++i) {
-        data_to_use[i] = filtered_data[dist(gen)];
+        data_to_use[i] = sorted_points[dist(gen)];
     }
     std::pair<float, float> previous_estimate = CalculateTheilSenEstimator(data_to_use);
     std::pair<float, float> current_estimate = previous_estimate;
-    double tolerance = 1e-5;
+    double tolerance = 1e-9;
 
     for (int iter = 0; iter < MAX_ITER; ++iter) {
         std::array<Point<T>, num_points> new_data_to_use;
@@ -238,17 +232,17 @@ std::pair<float, float> CalculateAdaptiveTheilSenEstimator(const std::array<Poin
         float slope = current_estimate.first;
         float intercept = current_estimate.second;
 
-        for (std::size_t i = 0; i < filtered_count && new_count < num_points; ++i) {
-            auto x = filtered_data[i].x;
-            auto y = filtered_data[i].y;
+        for (std::size_t i = 0; i < num_points && new_count < num_points; ++i) {
+            auto x = sorted_points[i].x;
+            auto y = sorted_points[i].y;
             double predicted_y = slope * x + intercept;
-            if (std::fabs(y - predicted_y) < stddev_y){
-                new_data_to_use[new_count++] = filtered_data[i];
+            if (std::fabs(y - predicted_y) < 2*stddev_y){
+                new_data_to_use[new_count++] = sorted_points[i];
             }
         }
 
         while (new_count < num_points) {
-            new_data_to_use[new_count++] = filtered_data[dist(gen)];
+            new_data_to_use[new_count++] = sorted_points[dist(gen)];
         }
 
         current_estimate = CalculateTheilSenEstimator(new_data_to_use);
