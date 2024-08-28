@@ -31,16 +31,16 @@ int main(void)
 
   static Timer100us timer = Timer100us();
   timer.Init();
-
+  HAL_Delay(100);
 
   while (1)
   {
-    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-
     timer.StartMeasurement();
     auto slope_intercept_TheilSen = CalculateTheilSenEstimator(points);
     auto time_TheilSen = timer.StopMeasurement();
     logger.LogResults("Theil-Sen", std::to_string(slope_intercept_TheilSen.first), std::to_string(slope_intercept_TheilSen.second), time_TheilSen);
+    HAL_Delay(100);
+
 
     // timer.StartMeasurement();
     // auto slope_intercept_RTheilSen = CalculateRandomizedTheilSenEstimator<float, 1000, 200>(points);
@@ -71,18 +71,21 @@ int main(void)
     auto slope_intercept_RANSAC = CalculateRansacEstimator(points, 100, 0.1f);
     auto time_RANSAC = timer.StopMeasurement();
     logger.LogResults("RANSAC", std::to_string(slope_intercept_RANSAC.first), std::to_string(slope_intercept_RANSAC.second), time_RANSAC);
+    HAL_Delay(100);
+
 
     timer.StartMeasurement();
     auto slope_intercept_Huber = CalculateHuberEstimator(points, 1.35f);
     auto time_Huber = timer.StopMeasurement();
     logger.LogResults("Huber", std::to_string(slope_intercept_Huber.first), std::to_string(slope_intercept_Huber.second), time_Huber);
+    HAL_Delay(100);
+
 
     timer.StartMeasurement();
     auto slope_intercept_OLS = CalculateOLSEstimator(points);
     auto time_OLS = timer.StopMeasurement();
     logger.LogResults("OLS", std::to_string(slope_intercept_OLS.first), std::to_string(slope_intercept_OLS.second), time_OLS);
-
-    HAL_Delay(1000); 
+    HAL_Delay(100);
   }
 }
 
