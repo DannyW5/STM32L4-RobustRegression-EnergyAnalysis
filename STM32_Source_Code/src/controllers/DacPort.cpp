@@ -55,6 +55,6 @@ MilliVolt DacPort::GetVoltage()
 void DacPort::SetVoltage(MilliVolt voltage)
 {
     if(voltage >= 0 && voltage <= VDD_VALUE){
-        HAL_DAC_SetValue(&hdac_, channel_, DAC_ALIGN_12B_R, (static_cast<float>(voltage) / VDD_VALUE)*4096);
+        HAL_DAC_SetValue(&hdac_, channel_, DAC_ALIGN_12B_R, (static_cast<float>(voltage) / VDD_VALUE)*4095);
     }
 }
