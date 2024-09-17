@@ -36,37 +36,37 @@ int main(void)
   static Timer100us timer = Timer100us();
   timer.Init();
 
-  static const unsigned int voltage_samples_nbr = VDD_VALUE/10 + 1;
+  // static const unsigned int voltage_samples_nbr = VDD_VALUE / 10 + 1;
+  static const unsigned int voltage_samples_nbr = 240;
   while (1)
   {
-    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     uartController.SendData("Prad,Napiecie\n\r");
     std::array<Point<float>, voltage_samples_nbr> diode_characteristic;
-    for(int i = 0; i < voltage_samples_nbr; i++){
+    for (int i = 0; i < 331; i++)
+    {
       auto voltageToSet = 10 * i;
       measCircuitVoltage.SetVoltage(voltageToSet);
       HAL_Delay(10);
       auto Vresistor = measResistorVoltage.GetVoltage();
-      auto current = (static_cast<float>(Vresistor) * 1000 )/ RESISTOR_VALUE;
-      diode_characteristic[i].x = current;
-      diode_characteristic[i].y = voltageToSet - current * RESISTOR_VALUE / 1000;
-      uartController.SendData(std::to_string(diode_characteristic[i].x) + "," + std::to_string(diode_characteristic[i].y) + "\n\r");
+      auto current = (static_cast<float>(Vresistor) * 1000) / RESISTOR_VALUE;
+      if (i >= 60 && i <= voltage_samples_nbr + 60)
+      {
+        diode_characteristic[i - 60].y = current;
+        diode_characteristic[i - 60].x = voltageToSet - current * RESISTOR_VALUE / 1000;
+        uartController.SendData(std::to_string(current) + "," + std::to_string(voltageToSet - current * RESISTOR_VALUE / 1000) + "\n\r");
+      }
       HAL_Delay(10);
     }
-
-
-    // auto ResistorVoltage = measResistorVoltage.GetVoltage();
-    // uartController.SendData(std::to_string(ResistorVoltage) + "\n\r");
 
     // timer.StartMeasurement();
     // auto slope_intercept_TheilSen = CalculateTheilSenEstimator(points_cut);
     // auto time_TheilSen = timer.StopMeasurement();
     // logger.LogResults("Theil-Sen", std::to_string(slope_intercept_TheilSen.first), std::to_string(slope_intercept_TheilSen.second), time_TheilSen);
 
-    // timer.StartMeasurement();
-    // auto slope_intercept_RTheilSen = CalculateRandomizedTheilSenEstimator<float, 1000, 200>(points);
-    // auto time_RTheilSen = timer.StopMeasurement();
-    // logger.LogResults("Randomized Theil-Sen", std::to_string(slope_intercept_RTheilSen.first), std::to_string(slope_intercept_RTheilSen.second), time_RTheilSen);
+    timer.StartMeasurement();
+    auto slope_intercept_RTheilSen = CalculateRandomizedTheilSenEstimator<float, voltage_samples_nbr, 200>(diode_characteristic);
+    auto time_RTheilSen = timer.StopMeasurement();
+    logger.LogResults("Randomized Theil-Sen", std::to_string(slope_intercept_RTheilSen.first), std::to_string(slope_intercept_RTheilSen.second), time_RTheilSen);
 
     // timer.StartMeasurement();
     // auto slope_intercept_RMeanTheilSen = CalculateRandomizedMeanTheilSenEstimator<float, 1000, 100, 200>(points);
@@ -88,22 +88,21 @@ int main(void)
     // auto time_AWTheilSen = timer.StopMeasurement();
     // logger.LogResults("Adaptive Theil-Sen", std::to_string(slope_intercept_AWTheilSen.first), std::to_string(slope_intercept_AWTheilSen.second), time_AWTheilSen);
 
-    // timer.StartMeasurement();
-    // auto slope_intercept_RANSAC = CalculateRansacEstimator(points, 100, 0.1f);
-    // auto time_RANSAC = timer.StopMeasurement();
-    // logger.LogResults("RANSAC", std::to_string(slope_intercept_RANSAC.first), std::to_string(slope_intercept_RANSAC.second), time_RANSAC);
+    timer.StartMeasurement();
+    auto slope_intercept_RANSAC = CalculateRansacEstimator(diode_characteristic, 100, 0.1f);
+    auto time_RANSAC = timer.StopMeasurement();
+    logger.LogResults("RANSAC", std::to_string(slope_intercept_RANSAC.first), std::to_string(slope_intercept_RANSAC.second), time_RANSAC);
 
-    // timer.StartMeasurement();
-    // auto slope_intercept_Huber = CalculateHuberEstimator(points, 1.35f);
-    // auto time_Huber = timer.StopMeasurement();
-    // logger.LogResults("Huber", std::to_string(slope_intercept_Huber.first), std::to_string(slope_intercept_Huber.second), time_Huber);
+    timer.StartMeasurement();
+    auto slope_intercept_Huber = CalculateHuberEstimator(diode_characteristic, 1.35f);
+    auto time_Huber = timer.StopMeasurement();
+    logger.LogResults("Huber", std::to_string(slope_intercept_Huber.first), std::to_string(slope_intercept_Huber.second), time_Huber);
 
-    // timer.StartMeasurement();
-    // auto slope_intercept_OLS = CalculateOLSEstimator(points);
-    // auto time_OLS = timer.StopMeasurement();
-    // logger.LogResults("OLS", std::to_string(slope_intercept_OLS.first), std::to_string(slope_intercept_OLS.second), time_OLS);
+    timer.StartMeasurement();
+    auto slope_intercept_OLS = CalculateOLSEstimator(diode_characteristic);
+    auto time_OLS = timer.StopMeasurement();
+    logger.LogResults("OLS", std::to_string(slope_intercept_OLS.first), std::to_string(slope_intercept_OLS.second), time_OLS);
 
-    HAL_Delay(1000); 
+    HAL_Delay(1000);
   }
 }
-
