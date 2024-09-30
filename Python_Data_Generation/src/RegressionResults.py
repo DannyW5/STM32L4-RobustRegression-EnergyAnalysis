@@ -48,7 +48,7 @@ class RegressionCalculator:
     
 
 if __name__ == "__main__":
-    df = pd.read_csv("Python_Data_Generation/data/DataLength1000.csv")
+    df = pd.read_csv("Python_Data_Generation/data/DataLength100_Gauss1.csv")
     x = df[["X"]].to_numpy()
     y = df["Y"].to_numpy()
 
