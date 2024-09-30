@@ -59,7 +59,7 @@ class RegressionDataGenerator:
         # x, y = datasets.make_regression(n_samples=number, n_features=1, n_targets=1, tail_strength=0.3, effective_rank=1, n_informative=1, noise=0.95, bias=100, random_state=5)
         
         x = np.linspace(-2000, 2000, number)
-        y = np.random.randint(10, 9999) * x / 100
+        y = np.random.randint(10, 9999) * x
 
         # Wybieramy losowe indeksy próbek, do których będzie dodany szum
         noisy_indices = np.random.choice(number, size=num_noisy_samples, replace=False)
@@ -68,13 +68,13 @@ class RegressionDataGenerator:
         noise = np.zeros(y.shape)  # Inicjalizacja szumu zerami
         
         if noise_type == "gauss":
-            noise_values = np.random.normal(0, np.random.randint(10, 500), size=num_noisy_samples)  # Szum Gaussa
+            noise_values = np.random.normal(0, np.random.randint(10, 10000), size=num_noisy_samples)  # Szum Gaussa
         elif noise_type == "poisson":
-            noise_values = np.random.poisson(lam=np.random.randint(10, 500), size=num_noisy_samples)  # Szum Poissona
+            noise_values = np.random.poisson(lam=np.random.randint(10, 10000), size=num_noisy_samples)  # Szum Poissona
         elif noise_type == "uniform":
-            noise_values = np.random.uniform(-np.random.randint(10, 500), np.random.randint(10, 500), size=num_noisy_samples)  # Szum jednostajny
+            noise_values = np.random.uniform(-np.random.randint(10, 10000), np.random.randint(10, 10000), size=num_noisy_samples)  # Szum jednostajny
         elif noise_type == "laplace":
-            noise_values = np.random.laplace(0, np.random.randint(10, 500), size=num_noisy_samples)  # Szum Laplace'a
+            noise_values = np.random.laplace(0, np.random.randint(10, 10000), size=num_noisy_samples)  # Szum Laplace'a
         else:
             raise ValueError("Nieznany typ szumu. Dostępne: gauss, poisson, uniform, laplace")
         
@@ -97,11 +97,11 @@ class RegressionDataGenerator:
             
 
 if __name__ == "__main__":
-    x, y = RegressionDataGenerator.generate_data_with_noise(100, 20, "gauss")
-    RegressionDataGenerator.save_data(x, y, "DataLength100_Gauss1")
-    x, y = RegressionDataGenerator.generate_data_with_noise(100, 20, "poisson")
-    RegressionDataGenerator.save_data(x, y, "DataLength100_Poisson1")
-    x, y = RegressionDataGenerator.generate_data_with_noise(100, 20, "uniform")
-    RegressionDataGenerator.save_data(x, y, "DataLength100_Uniform1")
-    x, y = RegressionDataGenerator.generate_data_with_noise(100, 20, "laplace")
-    RegressionDataGenerator.save_data(x, y, "DataLength100_Laplace1")
+    x, y = RegressionDataGenerator.generate_data_with_noise(200, 200, "gauss")
+    RegressionDataGenerator.save_data(x, y, "DataLength_200_200_Gauss")
+    x, y = RegressionDataGenerator.generate_data_with_noise(200, 200, "poisson")
+    RegressionDataGenerator.save_data(x, y, "DataLength_200_200_Poisson")
+    x, y = RegressionDataGenerator.generate_data_with_noise(200, 200, "uniform")
+    RegressionDataGenerator.save_data(x, y, "DataLength_200_200_Uniform")
+    x, y = RegressionDataGenerator.generate_data_with_noise(200, 200, "laplace")
+    RegressionDataGenerator.save_data(x, y, "DataLength_200_200_Laplace")
